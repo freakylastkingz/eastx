@@ -3,11 +3,10 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from formapp.views import index, success
+from formapp.views import index
 
 urlpatterns = [
     path('', index, name='index'),
-    path('success/', success, name='success'),
     path('admin/', admin.site.urls),
 ]
 

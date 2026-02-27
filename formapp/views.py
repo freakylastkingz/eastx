@@ -1,39 +1,38 @@
+from django.contrib import messages
 from django.core.mail import send_mail
-
 from django.shortcuts import redirect, render
-from .forms import ContactForm
 from django.template.loader import render_to_string
 
-# Create your views here.
+from .forms import ContactForm
+
+
 def index(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
-        
+
         if form.is_valid():
-            
-            html = render_to_string('contact/emails/contactform.html', {
-                'email': form.cleaned_data['email'],
-                'password': form.cleaned_data['password'],
-            })
-            
+            html = render_to_string(
+                'contact/emails/contactform.html',
+                {
+                    'name': form.cleaned_data['name'],
+                    'email': form.cleaned_data['email'],
+                },
+            )
+
             send_mail(
-                subject=f"New contact form submission",
+                subject='New contact form submission',
                 from_email=form.cleaned_data['email'],
-                message=f"Email: {form.cleaned_data['email']}, Password: {form.cleaned_data['password']}",  
+                message=(
+                    f"Email: {form.cleaned_data['email']}, "
+                    f"Name: {form.cleaned_data['name']}"
+                ),
                 recipient_list=['bm3141838@gmail.com'],
                 html_message=html,
             )
-            
-            
-            
-            return redirect('success')
+
+            messages.success(request, 'Contact form submitted')
+            return redirect('index')
     else:
         form = ContactForm()
-        
-        
-    return render(request, 'contact/index.html',
-                    {'form': form})
 
-
-def success(request):
-    return render(request, 'contact/success.html')
+    return render(request, 'contact/index.html', {'form': form})

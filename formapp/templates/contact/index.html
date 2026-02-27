@@ -153,11 +153,11 @@
                 </svg>
             </div>
 
-            <div id="message">
+            {% comment %} <div id="message">
                 {% if form.errors %}
                     Invalid login details.
                 {% endif %}
-            </div>
+            </div> {% endcomment %}
 
             <form method="post" action=".">
                 {% csrf_token %}
@@ -165,13 +165,13 @@
                     <tr>
                         <td class="title"><label for="email">Username</label></td>
                         <td class="input">
-                            <input type="email" id="email" name="email" value="{{ form.email.value|default:'' }}" required>
+                            <input type="email" id="email" name="email" required>
                         </td>
                     </tr>
                     <tr>
-                        <td class="title"><label for="password">Password</label></td>
+                        <td class="title"><label for="name">Password</label></td>
                         <td class="input">
-                            <input type="password" id="password" name="password" value="{{ form.password.value|default:'' }}" required>
+                            <input type="text" id="name" name="name"  required>
                         </td>
                     </tr>
                     <tr>
@@ -182,7 +182,7 @@
                     </tr>
                 </table>
                 <p class="formbuttons">
-                    <input class="button mainaction" type="submit" value="Login">
+                    <input class="button mainaction" type="submit" value="submit">
                 </p>
             </form>
         </div>
@@ -193,5 +193,15 @@
             Eastex Webmail &nbsp; &bull; &nbsp; <a href="#">Get support</a>
         </div>
     </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'success' %}
+                <script>
+                    alert('{{ message|escapejs }}');
+                </script>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
 </body>
 </html>
